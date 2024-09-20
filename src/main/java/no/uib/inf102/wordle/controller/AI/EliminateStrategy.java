@@ -33,7 +33,6 @@ public class EliminateStrategy implements IStrategy {
             guesses.eliminateWords(feedback);
         }
 
-        // Choose a random word from the possible guesses after eliminating
         int randIndex = random.nextInt(guesses.size());
         return guesses.possibleAnswers().get(randIndex);
     }

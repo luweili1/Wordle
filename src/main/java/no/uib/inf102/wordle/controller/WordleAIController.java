@@ -7,6 +7,7 @@ import javax.swing.Timer;
 
 import no.uib.inf102.wordle.controller.AI.EliminateStrategy;
 import no.uib.inf102.wordle.controller.AI.IStrategy;
+import no.uib.inf102.wordle.controller.AI.MyStrategy;
 import no.uib.inf102.wordle.controller.AI.RandomStrategy;
 import no.uib.inf102.wordle.controller.AI.FrequencyStrategy;
 import no.uib.inf102.wordle.model.Dictionary;
@@ -31,7 +32,7 @@ public class WordleAIController extends WordleController {
         this.AI = new RandomStrategy(dictionary);
         this.AI = new EliminateStrategy(dictionary);
         this.AI = new FrequencyStrategy(dictionary);
-        // this.AI = new MyStrategy(dictionary);
+        this.AI = new MyStrategy(dictionary);
 
         view.addKeyListener(this);
         view.setFocusable(true);

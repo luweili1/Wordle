@@ -10,15 +10,15 @@ The runtime should be expressed using these three parameters:
 
 
 ## Task 1 - matchWord
-* `WordleAnswer::matchWord`: O(?)
+* `WordleAnswer::matchWord`: O(k)
     * O(k)
 
 ## Task 2 - EliminateStrategy
-* `WordleWordList::eliminateWords`: O(?)
+* `WordleWordList::eliminateWords`: O(m*k)
     * *Insert description of why the method has the given runtime*
 
 ## Task 3 - FrequencyStrategy
-* `FrequencyStrategy::makeGuess`: O(?)
+* `FrequencyStrategy::makeGuess`: O(m*k)
     * *Insert description of why the method has the given runtime*
 
 

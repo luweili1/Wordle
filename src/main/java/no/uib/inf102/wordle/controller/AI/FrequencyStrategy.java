@@ -1,5 +1,6 @@
 package no.uib.inf102.wordle.controller.AI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,46 +27,42 @@ public class FrequencyStrategy implements IStrategy {
 
     @Override
     public String makeGuess(WordleWord feedback) {
-        List<String> possibleAnswers = guesses.possibleAnswers(); // henter ut mulige svar
-        calculateLetterFrequency(possibleAnswers); // beregner frekvensen av bokstaver i mulige svar
-
-        String bestGuess = null; // beste gjetning
-        int maxGreenCount = -1;
-
-        for (String candidate : possibleAnswers) {
-            int score = scoreWord(candidate);
-
-            // Oppdater hvis dette er den beste kandidaten
-            if (score > maxGreenCount) {
-                maxGreenCount = score;
-                bestGuess = candidate;
-            }
+        if (feedback != null) {
+            guesses.eliminateWords(feedback);
         }
-        return bestGuess;
+        List<HashMap<Character, Integer>> frequencyTable = makeFrequencyTable(dictionary);
+        String currentBestWord = findBestWord(frequencyTable);
+        return currentBestWord;
     }
 
-    private int scoreWord(String candidate) {
-        int score = 0;
-        for (int i = 0; i < candidate.length(); i++) {
-            char letter = candidate.charAt(i);
-            score += letterFrequency[i].getOrDefault(letter, 0);
-        }
-        return score;
-    }
-
-    private void calculateLetterFrequency(List<String> possibleAnswers) {
-        int wordLength = possibleAnswers.get(0).length();
-        letterFrequency = new HashMap[wordLength];
-        for (int i = 0; i < wordLength; i++) {
-            letterFrequency[i] = new HashMap<>();
-        }
-
-        for (String word : possibleAnswers) {
+    private String findBestWord(List<HashMap<Character, Integer>> frequencyTable) {
+        String bestWord = "";
+        int bestWordScore = 0;
+        for (String word : guesses.possibleAnswers()) {
+            int score = 0;
             for (int i = 0; i < word.length(); i++) {
-                char letter = word.charAt(i);
-                letterFrequency[i].put(letter, letterFrequency[i].getOrDefault(letter, 0) + 1);
+                score += frequencyTable.get(i).getOrDefault(word.charAt(i), 0);
+            }
+            if (score > bestWordScore) {
+                bestWord = word;
+                bestWordScore = score;
             }
         }
+        return bestWord;
+    }
+
+    private List<HashMap<Character, Integer>> makeFrequencyTable(Dictionary dictionary) {
+        List<String> guessWordList = guesses.possibleAnswers();
+        List<HashMap<Character, Integer>> frequencyTable = new ArrayList<>();
+        for (int i = 0; i < guessWordList.get(0).length(); i++) {
+            frequencyTable.add(new HashMap<>());
+        }
+        for (int i = 0; i < guessWordList.get(0).length(); i++) {
+            for (String word : guessWordList) {
+                frequencyTable.get(i).put(word.charAt(i), frequencyTable.get(i).getOrDefault(word.charAt(i), 0) + 1);
+            }
+        }
+        return frequencyTable;
     }
 
     @Override

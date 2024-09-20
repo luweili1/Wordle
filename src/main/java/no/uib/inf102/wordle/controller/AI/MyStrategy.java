@@ -1,6 +1,8 @@
 package no.uib.inf102.wordle.controller.AI;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import no.uib.inf102.wordle.model.Dictionary;
 import no.uib.inf102.wordle.model.word.WordleWord;
@@ -8,8 +10,8 @@ import no.uib.inf102.wordle.model.word.WordleWordList;
 
 public class MyStrategy implements IStrategy {
 
-    private WordleWordList guesses;
     private Dictionary dictionary;
+    private WordleWordList possibleAnswers;
 
     public MyStrategy(Dictionary dictionary) {
         this.dictionary = dictionary;
@@ -18,62 +20,58 @@ public class MyStrategy implements IStrategy {
 
     @Override
     public String makeGuess(WordleWord feedback) {
-        List<String> possibleAnswers = guesses.possibleAnswers();
-
-        // If this is the first guess, pick a word with unique, common letters
-        if (feedback == null) {
-            return "aurei"; // A balanced word with common vowels and no repeated letters
+        if (feedback != null) {
+            possibleAnswers.eliminateWords(feedback);
         }
-
-        // Update the possible answers based on the feedback from the previous guess
-        guesses.updateWithFeedback(feedback);
-
-        // Step 1: If many letters are unknown, guess a word that maximizes letter
-        // coverage
-        String bestGuess = pickMaxCoverageWord(possibleAnswers);
-
-        // Step 2: If possibleAnswers list is small, focus on making more precise
-        // guesses
-        if (possibleAnswers.size() < 10) {
-            bestGuess = pickMostLikelyWord(possibleAnswers);
-        }
-
-        return bestGuess;
+        String bestWord = findMostInformativeWord();
+        return bestWord;
     }
 
-    private String pickMostLikelyWord(List<String> possibleAnswers) {
-        return possibleAnswers.get(0);
-
-    }
-
-    private String pickMaxCoverageWord(List<String> possibleAnswers) {
-        String bestWord = null;
-        int maxCoverage = 0;
-
-        // Iterate through the dictionary to find words that cover the most unique
-        // letters
-        for (String candidate : dictionary.getAllWords()) {
-            int uniqueLetters = countUniqueLetters(candidate);
-
-            // Prioritize words that have the most new unique letters
-            if (uniqueLetters > maxCoverage) {
-                maxCoverage = uniqueLetters;
-                bestWord = candidate;
+    private String findMostInformativeWord() {
+        String bestWord = "";
+        double bestScore = -1;
+        for (String word : possibleAnswers.possibleAnswers()) {
+            double score = calculateInformationGain(word);
+            if (score > bestScore) {
+                bestWord = word;
+                bestScore = score;
             }
         }
         return bestWord;
     }
 
-    private int countUniqueLetters(String candidate) {
-        String word;
-        return (int) word.chars().distinct().count();
+    private double calculateInformationGain(String word) {
+        double score = 0;
+        Map<String, Integer> bucket = new HashMap<>();
+        for (String possible : possibleAnswers.possibleAnswers()) {
+            String pattern = getPattern(word, possible);
+            bucket.put(pattern, bucket.getOrDefault(pattern, 0) + 1);
+        }
+        for (int count : bucket.values()) {
+            double p = (double) count / possibleAnswers.possibleAnswers().size();
+            score -= p * Math.log(p);
+        }
+        return score;
+    }
 
+    private String getPattern(String guess, String actual) {
+        StringBuilder pattern = new StringBuilder(".....");
+        // Computes pattern logic based on feedback rules:
+        // 'G' (Green) for correct letter and position
+        // 'Y' (Yellow) for correct letter
+        // '.' for incorrect letter
+        for (int i = 0; i < guess.length(); i++) {
+            if (guess.charAt(i) == actual.charAt(i)) {
+                pattern.setCharAt(i, 'G');
+            } else if (actual.contains(String.valueOf(guess.charAt(i)))) {
+                pattern.setCharAt(i, 'Y');
+            }
+        }
+        return pattern.toString();
     }
 
     @Override
     public void reset() {
-        guesses = new WordleWordList(dictionary);
-
+        possibleAnswers = new WordleWordList(dictionary);
     }
-
 }
