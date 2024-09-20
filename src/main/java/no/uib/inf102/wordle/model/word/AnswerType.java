@@ -8,7 +8,7 @@ public enum AnswerType {
 
     BLANK('b'),
     WRONG('w'),
-    MISPLACED('m'),
+    WRONG_POSITION('p'),
     CORRECT('c');
 
     public final char character;

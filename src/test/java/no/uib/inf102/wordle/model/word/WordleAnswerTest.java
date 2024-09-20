@@ -38,7 +38,7 @@ public class WordleAnswerTest {
 
         WordleWord feedback = answer.makeGuess(wrongPositionAnswerString);
         for (WordleCharacter c : feedback) {
-            assertEquals(AnswerType.MISPLACED, c.answerType);
+            assertEquals(AnswerType.WRONG_POSITION, c.answerType);
         }
     }
 
@@ -65,8 +65,7 @@ public class WordleAnswerTest {
         for (WordleCharacter c : feedback) {
             if (i < 2) {
                 assertEquals(AnswerType.WRONG, c.answerType);
-            }
-            else {
+            } else {
                 assertEquals(AnswerType.CORRECT, c.answerType);
             }
             i++;
@@ -81,7 +80,8 @@ public class WordleAnswerTest {
         int i = 0;
         for (WordleCharacter c : feedback) {
             if (i == 0) {
-                assertEquals(AnswerType.WRONG, c.answerType, "There is an 'a' in the answer, but it is located later at index 2. This 'a' should be WRONG.");
+                assertEquals(AnswerType.WRONG, c.answerType,
+                        "There is an 'a' in the answer, but it is located later at index 2. This 'a' should be WRONG.");
             }
             if (i == 1) {
                 assertEquals(AnswerType.WRONG, c.answerType);
@@ -107,13 +107,14 @@ public class WordleAnswerTest {
         int i = 0;
         for (WordleCharacter c : feedback) {
             if (i == 0) {
-                assertEquals(AnswerType.WRONG, c.answerType, "The first 's' should be WRONG. There is only one 's' in 'rocks'. The second 's' should be CORRECT.");
+                assertEquals(AnswerType.WRONG, c.answerType,
+                        "The first 's' should be WRONG. There is only one 's' in 'rocks'. The second 's' should be CORRECT.");
             }
             if (i == 1) {
                 assertEquals(AnswerType.CORRECT, c.answerType);
             }
             if (i == 2) {
-                assertEquals(AnswerType.MISPLACED, c.answerType);
+                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
             }
             if (i == 3) {
                 assertEquals(AnswerType.WRONG, c.answerType);
@@ -135,7 +136,7 @@ public class WordleAnswerTest {
         int i = 0;
         for (WordleCharacter c : feedback) {
             if (i == 0) {
-                assertEquals(AnswerType.MISPLACED, c.answerType);
+                assertEquals(AnswerType.WRONG, c.answerType);
             }
             if (i == 1) {
                 assertEquals(AnswerType.WRONG, c.answerType);
@@ -166,16 +167,16 @@ public class WordleAnswerTest {
                 assertEquals(AnswerType.WRONG, c.answerType);
             }
             if (i == 1) {
-                assertEquals(AnswerType.MISPLACED, c.answerType);
+                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
             }
             if (i == 2) {
-                assertEquals(AnswerType.MISPLACED, c.answerType);
+                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
             }
             if (i == 3) {
                 assertEquals(AnswerType.WRONG, c.answerType);
             }
             if (i == 4) {
-                assertEquals(AnswerType.MISPLACED, c.answerType);
+                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
             }
             i++;
         }
@@ -183,7 +184,7 @@ public class WordleAnswerTest {
         assertFalse(WordleWord.isPossibleWord("apoop", feedback));
     }
 
-     @Test
+    @Test
     public void isPossibleWordMommy() {
         WordleAnswer answer = new WordleAnswer("mommy", dictionary);
         WordleWord feedback = answer.makeGuess("money");
@@ -214,11 +215,11 @@ public class WordleAnswerTest {
     @Test
     public void canCreateLegalWords() {
         for (String legalAnswerWord : dictionary.getAnswerWordsList()) {
-            assertDoesNotThrow(() -> new WordleAnswer(legalAnswerWord, dictionary), "This word was not legal: " + legalAnswerWord);
+            assertDoesNotThrow(() -> new WordleAnswer(legalAnswerWord, dictionary),
+                    "This word was not legal: " + legalAnswerWord);
         }
     }
 
-    
     @Test
     public void cannotGuessNonsenseWords() {
         WordleAnswer answer = new WordleAnswer(LEGAL_WORD, dictionary);
@@ -246,6 +247,5 @@ public class WordleAnswerTest {
                 return word;
         }
     }
-
 
 }

@@ -1,6 +1,8 @@
 package no.uib.inf102.wordle.model.word;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import no.uib.inf102.wordle.model.Dictionary;
@@ -89,13 +91,38 @@ public class WordleAnswer {
             throw new IllegalArgumentException("Guess and answer must have same number of letters but guess = " + guess
                     + " and answer = " + answer);
 
-        // TODO: Implement me :)
-
         AnswerType[] feedback = new AnswerType[wordLength];
+
+        // Step 1: Count occurrences of each letter in the answer
+        Map<Character, Integer> answerLetterCounts = new HashMap<>();
         for (int i = 0; i < wordLength; i++) {
-            feedback[i] = AnswerType.WRONG;
+            char letter = answer.charAt(i);
+            answerLetterCounts.put(letter, answerLetterCounts.getOrDefault(letter, 0) + 1);
         }
 
-        return new WordleWord(guess,feedback);
+        // Step 2: First pass, mark CORRECT letters and decrease counts
+        for (int i = 0; i < wordLength; i++) {
+            char letter = guess.charAt(i);
+            if (letter == answer.charAt(i)) {
+                feedback[i] = AnswerType.CORRECT;
+                answerLetterCounts.put(letter, answerLetterCounts.get(letter) - 1);
+            }
+        }
+
+        // Step 3: Second pass, mark WRONG_POSITION or WRONG for remaining letters
+        for (int i = 0; i < wordLength; i++) {
+            if (feedback[i] == null) {
+                char letter = guess.charAt(i);
+                if (answerLetterCounts.containsKey(letter) && answerLetterCounts.get(letter) > 0) {
+                    feedback[i] = AnswerType.WRONG_POSITION;
+                    answerLetterCounts.put(letter, answerLetterCounts.get(letter) - 1);
+                } else {
+                    feedback[i] = AnswerType.WRONG;
+                }
+            }
+        }
+
+        return new WordleWord(guess, feedback);
     }
+
 }

@@ -29,9 +29,9 @@ public class WordleAIController extends WordleController {
         Dictionary dictionary = model.getDictionary();
         this.timer = new Timer(model.getTimerDelay(), this::clockTick);
         this.AI = new RandomStrategy(dictionary);
-        //this.AI = new EliminateStrategy(dictionary);
-        //this.AI = new FrequencyStrategy(dictionary);
-        //this.AI = new MyStrategy(dictionary);
+        this.AI = new EliminateStrategy(dictionary);
+        this.AI = new FrequencyStrategy(dictionary);
+        // this.AI = new MyStrategy(dictionary);
 
         view.addKeyListener(this);
         view.setFocusable(true);
@@ -70,9 +70,11 @@ public class WordleAIController extends WordleController {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
 }

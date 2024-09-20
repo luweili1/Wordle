@@ -11,7 +11,7 @@ The runtime should be expressed using these three parameters:
 
 ## Task 1 - matchWord
 * `WordleAnswer::matchWord`: O(?)
-    * *Insert description of why the method has the given runtime*
+    * O(k)
 
 ## Task 2 - EliminateStrategy
 * `WordleWordList::eliminateWords`: O(?)

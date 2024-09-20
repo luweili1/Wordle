@@ -3,6 +3,7 @@ package no.uib.inf102.wordle.model.word;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +62,19 @@ public class WordleWordList {
 	 * @param feedback
 	 */
 	public void eliminateWords(WordleWord feedback) {
-		// TODO: Implement me :)
+		List<String> newPossibleAnswers = new ArrayList<>();
+		int i = 0;
+
+		while (i < possibleAnswers.size()) {
+			String answer = possibleAnswers.get(i);
+			if (WordleWord.isPossibleWord(answer, feedback)) {
+				newPossibleAnswers.add(answer);
+			}
+			i++;
+		}
+
+		// Update the list of possible answers
+		possibleAnswers = newPossibleAnswers;
 	}
 
 	/**
@@ -89,6 +102,11 @@ public class WordleWordList {
 	 */
 	public int wordLength() {
 		return allWords.WORD_LENGTH;
+	}
+
+	public void updateWithFeedback(WordleWord feedback) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'updateWithFeedback'");
 	}
 
 }

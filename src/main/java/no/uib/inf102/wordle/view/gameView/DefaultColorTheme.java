@@ -5,16 +5,16 @@ import java.awt.Color;
 import no.uib.inf102.wordle.model.word.AnswerType;
 
 public class DefaultColorTheme implements ColorTheme {
-  
+
   @Override
   public Color getCellColor(AnswerType ansType) {
-    Color color = switch(ansType) {
+    Color color = switch (ansType) {
       case BLANK -> Color.WHITE;
       case WRONG -> Color.GRAY;
-      case MISPLACED -> Color.YELLOW;
+      case WRONG_POSITION -> Color.YELLOW;
       case CORRECT -> Color.GREEN;
       default -> throw new IllegalArgumentException(
-        "No available color for '" + ansType + "'");
+          "No available color for '" + ansType + "'");
     };
     return color;
   }
@@ -28,5 +28,5 @@ public class DefaultColorTheme implements ColorTheme {
   public Color getBackgroundColor() {
     return null;
   }
-  
+
 }

@@ -75,4 +75,9 @@ public class Dictionary {
         return answerWordsSet.contains(wordGuess.toLowerCase());
     }
 
+    public String[] getAllWords() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getAllWords'");
+    }
+
 }

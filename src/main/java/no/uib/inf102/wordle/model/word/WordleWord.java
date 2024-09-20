@@ -131,4 +131,9 @@ public class WordleWord implements Iterable<WordleCharacter> {
         return Objects.equals(word, other.word);
     }
 
+    public boolean matches(WordleWord wordleWord) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'matches'");
+    }
+
 }
