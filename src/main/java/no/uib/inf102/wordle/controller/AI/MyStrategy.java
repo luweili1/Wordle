@@ -1,6 +1,8 @@
 package no.uib.inf102.wordle.controller.AI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -8,10 +10,14 @@ import no.uib.inf102.wordle.model.Dictionary;
 import no.uib.inf102.wordle.model.word.WordleWord;
 import no.uib.inf102.wordle.model.word.WordleWordList;
 
+/**
+ * This strategy finds the word within the possible words which has the highest
+ * expected number of green matches.
+ * 
+ */
 public class MyStrategy implements IStrategy {
-
     private Dictionary dictionary;
-    private WordleWordList possibleAnswers;
+    private WordleWordList guesses;
 
     public MyStrategy(Dictionary dictionary) {
         this.dictionary = dictionary;
@@ -20,58 +26,61 @@ public class MyStrategy implements IStrategy {
 
     @Override
     public String makeGuess(WordleWord feedback) {
+
         if (feedback != null) {
-            possibleAnswers.eliminateWords(feedback);
+            guesses.eliminateWords(feedback);
         }
-        String bestWord = findMostInformativeWord();
-        return bestWord;
-    }
 
-    private String findMostInformativeWord() {
+        List<Map<Character, Integer>> letterFrequency = initializeLetterFrequency();
+
+        int bestGreenMatches = 0;
         String bestWord = "";
-        double bestScore = -1;
-        for (String word : possibleAnswers.possibleAnswers()) {
-            double score = calculateInformationGain(word);
-            if (score > bestScore) {
+
+        for (String word : guesses.possibleAnswers()) {
+            int greenMatches = 0;
+            for (int i = 0; i < word.length(); i++) {
+                char letter = word.charAt(i);
+                greenMatches += letterFrequency.get(i).getOrDefault(letter, 0);
+            }
+            if (greenMatches > bestGreenMatches) {
+                bestGreenMatches = greenMatches;
                 bestWord = word;
-                bestScore = score;
             }
         }
+
         return bestWord;
     }
 
-    private double calculateInformationGain(String word) {
-        double score = 0;
-        Map<String, Integer> bucket = new HashMap<>();
-        for (String possible : possibleAnswers.possibleAnswers()) {
-            String pattern = getPattern(word, possible);
-            bucket.put(pattern, bucket.getOrDefault(pattern, 0) + 1);
-        }
-        for (int count : bucket.values()) {
-            double p = (double) count / possibleAnswers.possibleAnswers().size();
-            score -= p * Math.log(p);
-        }
-        return score;
-    }
+    /**
+     * Initializes the letter frequency for each position in the word.
+     * This method creates a list of maps, where each map corresponds to a character
+     * position
+     * in the word and contains the frequency of each letter appearing in that
+     * position
+     * across all possible words.
+     * 
+     * @return A list of maps where each map contains the frequency of each letter
+     *         in the corresponding position.
+     */
+    private List<Map<Character, Integer>> initializeLetterFrequency() {
+        List<Map<Character, Integer>> letterFrequency = new ArrayList<>();
 
-    private String getPattern(String guess, String actual) {
-        StringBuilder pattern = new StringBuilder(".....");
-        // Computes pattern logic based on feedback rules:
-        // 'G' (Green) for correct letter and position
-        // 'Y' (Yellow) for correct letter
-        // '.' for incorrect letter
-        for (int i = 0; i < guess.length(); i++) {
-            if (guess.charAt(i) == actual.charAt(i)) {
-                pattern.setCharAt(i, 'G');
-            } else if (actual.contains(String.valueOf(guess.charAt(i)))) {
-                pattern.setCharAt(i, 'Y');
+        for (int i = 0; i < 5; i++) {
+            letterFrequency.add(new HashMap<>());
+        }
+
+        for (String word : guesses.possibleAnswers()) {
+            for (int i = 0; i < word.length(); i++) {
+                char letter = word.charAt(i);
+                letterFrequency.get(i).put(letter, letterFrequency.get(i).getOrDefault(letter, 0) + 1);
             }
         }
-        return pattern.toString();
+
+        return letterFrequency;
     }
 
     @Override
     public void reset() {
-        possibleAnswers = new WordleWordList(dictionary);
+        guesses = new WordleWordList(dictionary);
     }
 }

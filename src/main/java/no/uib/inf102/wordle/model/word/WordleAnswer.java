@@ -78,12 +78,18 @@ public class WordleAnswer {
     }
 
     /**
-     * Generates a WordleWord showing the match between <code>guess</code> and
-     * <code>answer</code>
+     * Generates a WordleWord showing the match between the given guess and the
+     * answer.
+     * This method compares each letter of the guess with the corresponding letter
+     * in the answer and generates feedback indicating whether each letter is
+     * correct,
+     * in the wrong position, or not in the answer at all.
      * 
-     * @param guess
-     * @param answer
-     * @return
+     * @param guess  the guessed word
+     * @param answer answer the correct word
+     * @return a WordleWord containing the guess and an array of AnswerType for each
+     *         letter
+     * @throws IllegalArgumentException if the guess and answer have different
      */
     public static WordleWord matchWord(String guess, String answer) {
         int wordLength = answer.length();
@@ -93,14 +99,12 @@ public class WordleAnswer {
 
         AnswerType[] feedback = new AnswerType[wordLength];
 
-        // Step 1: Count occurrences of each letter in the answer
         Map<Character, Integer> answerLetterCounts = new HashMap<>();
         for (int i = 0; i < wordLength; i++) {
             char letter = answer.charAt(i);
             answerLetterCounts.put(letter, answerLetterCounts.getOrDefault(letter, 0) + 1);
         }
 
-        // Step 2: First pass, mark CORRECT letters and decrease counts
         for (int i = 0; i < wordLength; i++) {
             char letter = guess.charAt(i);
             if (letter == answer.charAt(i)) {
@@ -109,7 +113,6 @@ public class WordleAnswer {
             }
         }
 
-        // Step 3: Second pass, mark WRONG_POSITION or WRONG for remaining letters
         for (int i = 0; i < wordLength; i++) {
             if (feedback[i] == null) {
                 char letter = guess.charAt(i);

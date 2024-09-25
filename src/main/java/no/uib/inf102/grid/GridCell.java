@@ -3,7 +3,7 @@ package no.uib.inf102.grid;
 import java.util.Objects;
 
 public class GridCell<E> {
- 
+
     private CellPosition pos;
     private E value;
 
