@@ -40,7 +40,7 @@ public class FrequenctStrategyTest {
 
 	@Test
 	public void makeGuessafterScore() {
-		AnswerType[] oneYellow = { WRONG, AnswerType.WRONG_POSITION, WRONG, WRONG, WRONG };
+		AnswerType[] oneYellow = { WRONG, AnswerType.MISPLACED, WRONG, WRONG, WRONG };
 		WordleWord feedback = new WordleWord("score", oneYellow);
 
 		FrequencyStrategy ai = new FrequencyStrategy(dictionary);

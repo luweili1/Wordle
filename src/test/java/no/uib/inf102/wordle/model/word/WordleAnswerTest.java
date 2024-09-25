@@ -38,7 +38,7 @@ public class WordleAnswerTest {
 
         WordleWord feedback = answer.makeGuess(wrongPositionAnswerString);
         for (WordleCharacter c : feedback) {
-            assertEquals(AnswerType.WRONG_POSITION, c.answerType);
+            assertEquals(AnswerType.MISPLACED, c.answerType);
         }
     }
 
@@ -114,7 +114,7 @@ public class WordleAnswerTest {
                 assertEquals(AnswerType.CORRECT, c.answerType);
             }
             if (i == 2) {
-                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
+                assertEquals(AnswerType.MISPLACED, c.answerType);
             }
             if (i == 3) {
                 assertEquals(AnswerType.WRONG, c.answerType);
@@ -136,7 +136,7 @@ public class WordleAnswerTest {
         int i = 0;
         for (WordleCharacter c : feedback) {
             if (i == 0) {
-                assertEquals(AnswerType.WRONG, c.answerType);
+                assertEquals(AnswerType.MISPLACED, c.answerType);
             }
             if (i == 1) {
                 assertEquals(AnswerType.WRONG, c.answerType);
@@ -167,16 +167,16 @@ public class WordleAnswerTest {
                 assertEquals(AnswerType.WRONG, c.answerType);
             }
             if (i == 1) {
-                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
+                assertEquals(AnswerType.MISPLACED, c.answerType);
             }
             if (i == 2) {
-                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
+                assertEquals(AnswerType.MISPLACED, c.answerType);
             }
             if (i == 3) {
                 assertEquals(AnswerType.WRONG, c.answerType);
             }
             if (i == 4) {
-                assertEquals(AnswerType.WRONG_POSITION, c.answerType);
+                assertEquals(AnswerType.MISPLACED, c.answerType);
             }
             i++;
         }

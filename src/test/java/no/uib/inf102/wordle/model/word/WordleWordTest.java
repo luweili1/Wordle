@@ -1,6 +1,5 @@
 package no.uib.inf102.wordle.model.word;
 
-import static no.uib.inf102.wordle.model.word.AnswerType.WRONG;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,7 +21,7 @@ public class WordleWordTest {
 
     @Test
     public void createFullWord() {
-        AnswerType[] feedback = { WRONG, CORRECT, WRONG, WRONG_POSITION, WRONG };
+        AnswerType[] feedback = { WRONG, CORRECT, WRONG, MISPLACED, WRONG };
         String word = "arise";
         WordleWord wordleWord = new WordleWord(word, feedback);
         int letterCount = 0;
@@ -37,29 +36,29 @@ public class WordleWordTest {
     @Test
     public void sameLength() {
         String word = "hello";
-        AnswerType[] shortFeedback = { WRONG, CORRECT, WRONG_POSITION, WRONG };
+        AnswerType[] shortFeedback = { WRONG, CORRECT, MISPLACED, WRONG };
         assertThrows(IllegalArgumentException.class, () -> new WordleWord(word, shortFeedback));
-        AnswerType[] longFeedback = { WRONG, WRONG, CORRECT, WRONG_POSITION, WRONG, CORRECT };
+        AnswerType[] longFeedback = { WRONG, WRONG, CORRECT, MISPLACED, WRONG, CORRECT };
         assertThrows(IllegalArgumentException.class, () -> new WordleWord(word, longFeedback));
     }
 
     @Test
     public void noBlank() {
         String word = "hello";
-        AnswerType[] feedback = { WRONG, CORRECT, BLANK, WRONG_POSITION, WRONG };
+        AnswerType[] feedback = { WRONG, CORRECT, BLANK, MISPLACED, WRONG };
         assertThrows(IllegalArgumentException.class, () -> new WordleWord(word, feedback));
     }
 
     @Test
     public void noNull() {
         String word = "hello";
-        AnswerType[] feedback = { WRONG, CORRECT, null, WRONG_POSITION, WRONG };
+        AnswerType[] feedback = { WRONG, CORRECT, null, MISPLACED, WRONG };
         assertThrows(IllegalArgumentException.class, () -> new WordleWord(word, feedback));
     }
 
     @Test
     public void nonsenseWordsAreIllegal() {
-        AnswerType[] feedback = { WRONG, CORRECT, WRONG, WRONG_POSITION, WRONG };
+        AnswerType[] feedback = { WRONG, CORRECT, WRONG, MISPLACED, WRONG };
         for (int i = 0; i < 1000; i++) {
             WordleWord word = new WordleWord(createNonsenseWord(), feedback);
             assertFalse(dictionary.isLegalGuess(word.getWordString()));
@@ -98,7 +97,7 @@ public class WordleWordTest {
     @Test
     public void testContains() {
         String word = "hello";
-        AnswerType[] feedback = { WRONG, CORRECT, CORRECT, WRONG_POSITION, WRONG };
+        AnswerType[] feedback = { WRONG, CORRECT, CORRECT, MISPLACED, WRONG };
         WordleWord wordleWord = new WordleWord(word, feedback);
         assertTrue(wordleWord.contains('h'));
         assertTrue(wordleWord.contains('e'));
@@ -115,7 +114,7 @@ public class WordleWordTest {
     public void testEquals() {
         String word = "hello";
         AnswerType[] correctFeedback = { CORRECT, CORRECT, CORRECT, CORRECT, CORRECT };
-        AnswerType[] wrongFeedback = { WRONG_POSITION, CORRECT, WRONG, CORRECT, WRONG };
+        AnswerType[] wrongFeedback = { MISPLACED, CORRECT, WRONG, CORRECT, WRONG };
         WordleWord correct = new WordleWord(word, correctFeedback);
         WordleWord wrong = new WordleWord(word, wrongFeedback);
         assertTrue(correct.equals(new WordleWord(word, correctFeedback)));

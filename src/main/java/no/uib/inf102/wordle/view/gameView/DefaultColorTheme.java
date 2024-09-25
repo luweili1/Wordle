@@ -11,7 +11,7 @@ public class DefaultColorTheme implements ColorTheme {
     Color color = switch (ansType) {
       case BLANK -> Color.WHITE;
       case WRONG -> Color.GRAY;
-      case WRONG_POSITION -> Color.YELLOW;
+      case MISPLACED -> Color.YELLOW;
       case CORRECT -> Color.GREEN;
       default -> throw new IllegalArgumentException(
           "No available color for '" + ansType + "'");

@@ -117,7 +117,7 @@ public class WordleAnswer {
             if (feedback[i] == null) {
                 char letter = guess.charAt(i);
                 if (answerLetterCounts.containsKey(letter) && answerLetterCounts.get(letter) > 0) {
-                    feedback[i] = AnswerType.WRONG_POSITION;
+                    feedback[i] = AnswerType.MISPLACED;
                     answerLetterCounts.put(letter, answerLetterCounts.get(letter) - 1);
                 } else {
                     feedback[i] = AnswerType.WRONG;
