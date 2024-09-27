@@ -2,11 +2,7 @@ package no.uib.inf102.wordle.model.word;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-
 import no.uib.inf102.wordle.model.Dictionary;
 
 /**
@@ -38,15 +34,6 @@ public class WordleWordList {
 	}
 
 	/**
-	 * Get the list of all guessing words.
-	 * 
-	 * @return all words
-	 */
-	public Dictionary getAllWords() {
-		return allWords;
-	}
-
-	/**
 	 * Returns the list of possible answers.
 	 * 
 	 * @return
@@ -56,8 +43,8 @@ public class WordleWordList {
 	}
 
 	/**
-	 * Eliminates words from the possible answers list using the given
-	 * <code>feedback</code>
+	 * Eliminates words from the possible answers list using the given feedback.
+	 * 
 	 * 
 	 * @param feedback
 	 */
@@ -73,7 +60,6 @@ public class WordleWordList {
 			i++;
 		}
 
-		// Update the list of possible answers
 		possibleAnswers = newPossibleAnswers;
 	}
 
@@ -102,11 +88,6 @@ public class WordleWordList {
 	 */
 	public int wordLength() {
 		return allWords.WORD_LENGTH;
-	}
-
-	public void updateWithFeedback(WordleWord feedback) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'updateWithFeedback'");
 	}
 
 }

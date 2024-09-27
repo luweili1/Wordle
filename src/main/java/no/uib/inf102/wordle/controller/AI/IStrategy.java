@@ -3,9 +3,10 @@ package no.uib.inf102.wordle.controller.AI;
 import no.uib.inf102.wordle.model.word.WordleWord;
 
 public interface IStrategy {
-    
+
     /**
-     * Make a Wordle guess based on the given <code>feedback</code>.
+     * Make a Wordle guess based on the given feedback.
+     * 
      * @param feedback
      * @return the guess
      */

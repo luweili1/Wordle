@@ -82,8 +82,7 @@ public class WordleAnswer {
      * answer.
      * This method compares each letter of the guess with the corresponding letter
      * in the answer and generates feedback indicating whether each letter is
-     * correct,
-     * in the wrong position, or not in the answer at all.
+     * correct, in the wrong position, or not in the answer at all.
      * 
      * @param guess  the guessed word
      * @param answer answer the correct word

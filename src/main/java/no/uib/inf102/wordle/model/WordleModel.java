@@ -16,7 +16,8 @@ import no.uib.inf102.wordle.view.gameView.ViewableWordleModel;
 public class WordleModel implements ViewableWordleModel, ControllableWordleModel {
 
     /**
-     * Wordle board. Whenever a guess is locked in the board is given the acompanying letters and answer types (CORRECT, MISPLACED, WRONG)
+     * Wordle board. Whenever a guess is locked in the board is given the
+     * acompanying letters and answer types (CORRECT, MISPLACED, WRONG)
      */
     private WordleBoard board;
     /**
@@ -28,7 +29,7 @@ public class WordleModel implements ViewableWordleModel, ControllableWordleModel
      */
     private WordleAnswer answer;
     /**
-     * Current  Wordle guess. 
+     * Current Wordle guess.
      */
     private String currentGuess;
 
@@ -37,7 +38,7 @@ public class WordleModel implements ViewableWordleModel, ControllableWordleModel
     public WordleModel(WordleBoard board) {
         this(board, new Dictionary());
     }
-    
+
     public WordleModel(WordleBoard board, Dictionary dictionary) {
         this.board = board;
         this.dictionary = dictionary;
@@ -49,18 +50,18 @@ public class WordleModel implements ViewableWordleModel, ControllableWordleModel
 
     @Override
     public boolean removeCharacter() {
-    	if(currentGuess.isEmpty())
-    		return false;
+        if (currentGuess.isEmpty())
+            return false;
 
-    	currentGuess = currentGuess.substring(0, currentGuess.length()-1);
+        currentGuess = currentGuess.substring(0, currentGuess.length() - 1);
         return true;
     }
 
     @Override
     public boolean addCharacter(char c) {
-    	if(currentGuess.length()>= dictionary.WORD_LENGTH)
-    		return false;
-    	currentGuess = currentGuess+c;
+        if (currentGuess.length() >= dictionary.WORD_LENGTH)
+            return false;
+        currentGuess = currentGuess + c;
         return true;
     }
 
@@ -68,13 +69,13 @@ public class WordleModel implements ViewableWordleModel, ControllableWordleModel
     public WordleWord makeGuess() throws IllegalArgumentException {
         if (!dictionary.isLegalGuess(currentGuess))
             throw new IllegalArgumentException("Word is not legal");
-    
+
         // Check what letters were CORRECT/WRONG POSITION/WRONG
         WordleWord guessFeedback = answer.makeGuess(currentGuess);
         board.setRow(guessFeedback);
         if (guessFeedback.allMatch())
             gameState = GameState.VICTORY;
-        else if (board.getCurrentRow()+1 > board.rows())
+        else if (board.getCurrentRow() + 1 > board.rows())
             gameState = GameState.GAME_OVER;
 
         currentGuess = "";
@@ -96,7 +97,7 @@ public class WordleModel implements ViewableWordleModel, ControllableWordleModel
         List<GridCell<WordleCharacter>> cellList = new ArrayList<>();
         int col = 0;
         for (Character c : currentGuess.toCharArray()) {
-        	WordleCharacter cg = new WordleCharacter(c, AnswerType.BLANK);
+            WordleCharacter cg = new WordleCharacter(c, AnswerType.BLANK);
             CellPosition pos = new CellPosition(board.getCurrentRow(), col++);
             cellList.add(new GridCell<WordleCharacter>(pos, cg));
         }
