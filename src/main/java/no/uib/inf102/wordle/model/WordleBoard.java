@@ -41,6 +41,7 @@ public class WordleBoard extends Grid<WordleCharacter> {
 
     /**
      * Gets the current row of the board.
+     * 
      * @return current row
      */
     public int getCurrentRow() {
