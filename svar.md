@@ -48,17 +48,19 @@ The runtime should be expressed using these three parameters:
 
 
 # Task 4 - Make your own (better) AI
-For this task you do not need to give a runtime analysis. 
-Instead, you must explain your code. What was your idea for getting a better result? What is your strategy?
+MyStrategy prioritizes words with a high probability of including correct letters from the remaining possibilities. It avoids selecting the same word twice to maximize the value of each guess. Words are scored based on the frequency of their letters within the potential solutions.
 
-The main idea of MyStrategy is to select the word from the list of possible words with highest chance of having the right letters in the right place, aka. the words that has the highest expected number of green matchesl. 
+Initial Word List:
+MyStrategy begins with a full list of possible words from the dictionary. This list is maintained and updated using a WordleWordList object, which helps manage the remaining valid guesses as feedback is received after each guess.
 
+Guessing and Feedback:
+For each round of guessing, feedback from the previous guess is used to eliminate words that no longer match the possible answer based on the feedback.
 
-1) The strategy begins with a list of all possible words. It uses a WordleWordList to maintain and manage the list of possible words that can be guessed based on feedback from previous guesses.
+Choosing the Best Word:
+Once the remaining words are updated, the strategy calculates the frequency of each letter across all possible answers. The algorithm then iterates through each word in the remaining word list, assigning a score to each word based on the sum of its letters' frequencies. The word with the highest total frequency is chosen as the next guess.
 
-2) Making a Guess and for each guess, it removes words that dont match the feedback given. It then calculates the frequency of each letter's occurrence at each position (1st, 2nd, 3rd, 4th, 5th) among the remaining possible words.
+The strategy avoids counting duplicate letters more than once when calculating a word's score to avoid over-representing any single letter. This ensures that words with diverse letters are favored, as they provide more information about the potential answer.
 
-3) Choosing the best next guess by iterates through the list of remaining possible words to determine which word has the highest expected number of green matches (correct letters in the correct positions).
-For each word, it sums up the frequencies of its letters at each position. The word with the highest total frequency is chosen as the next guess.
+Narrowing Down: 
+The process of receiving feedback helps further narrow the pool of possible answers. After each guess, the list of possible words is reduced, and the frequency-based selection process is repeated until the correct word is found.
 
-4) The feedback (correct letters in the right place, correct letters in the wrong place, and incorrect letters) helps narrow down the list of possible words for the next guess.

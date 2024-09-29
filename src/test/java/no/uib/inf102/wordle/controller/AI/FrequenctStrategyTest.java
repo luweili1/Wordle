@@ -22,7 +22,7 @@ public class FrequenctStrategyTest {
 		assertTrue(dictionary.isLegalGuess(guess), "You must guess a word from the dictionary.");
 		if (dictionary.isLegalGuess("saree")) {
 			int expectedCount = countGreen("saree");
-			assertTrue(expectedCount >= count, "The word saree gave more green hits than " + guess);
+			assertTrue(expectedCount <= count, "The word saree gave more green hits than " + guess);
 		}
 		WordleAnswer ans = new WordleAnswer("berry", dictionary);
 	}

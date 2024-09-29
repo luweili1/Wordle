@@ -9,8 +9,6 @@ import no.uib.inf102.wordle.model.word.WordleWordList;
 /**
  * This strategy eliminates guesses that are impossible with the feedback given
  * throughout the game.
- * <br>
- * </br>
  * For example:
  * If the answer is "break" and you answer "chest", you will get
  * feedback showing that the middle "e" is in the right position. Therefore you

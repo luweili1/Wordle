@@ -6,7 +6,6 @@ import java.awt.event.KeyListener;
 import no.uib.inf102.wordle.model.GameState;
 import no.uib.inf102.wordle.view.gameView.WordleView;
 
-
 public class WordleHumanController extends WordleController {
 
     public WordleHumanController(ControllableWordleModel model, WordleView view) {
@@ -15,12 +14,10 @@ public class WordleHumanController extends WordleController {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // Hit 1 to reset game
         if (e.getKeyCode() == KeyEvent.VK_1) {
             model.reset();
         }
 
-        // No other actions are allowed when game is not active
         if (model.getGameState() != GameState.ACTIVE_GAME)
             return;
 
@@ -32,19 +29,19 @@ public class WordleHumanController extends WordleController {
                 model.makeGuess();
             } catch (IllegalArgumentException ex) {
                 System.err.println(ex.getMessage());
-            } 
-        } 
-        // Alphabet characters
-        else if (keyCode >= 65 && keyCode <= 90)
+            }
+        } else if (keyCode >= 65 && keyCode <= 90)
             model.addCharacter((char) Character.toLowerCase(keyCode));
-        
+
         view.repaint();
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+    }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
 }
