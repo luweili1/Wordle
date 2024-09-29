@@ -1,8 +1,6 @@
 package no.uib.inf102.wordle.controller.AI;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import no.uib.inf102.wordle.model.Dictionary;
@@ -11,7 +9,9 @@ import no.uib.inf102.wordle.model.word.WordleWordList;
 
 /**
  * This strategy finds the word within the possible words which has the highest
- * expected number of green matches.
+ * expected number of green matches. It does this by calculating the frequency
+ * of each letter in each position of the possible words, and then scoring each
+ * word based on the sum of the frequencies of the letters in the word.
  */
 public class FrequencyStrategy implements IStrategy {
 
@@ -26,55 +26,53 @@ public class FrequencyStrategy implements IStrategy {
     @Override
     public String makeGuess(WordleWord feedback) {
 
-        List<Map<Character, Integer>> letterFrequency = calculateLetterFrequency(guesses.possibleAnswers());
-
         if (feedback != null) {
             guesses.eliminateWords(feedback);
         }
 
-        int bestGreenMatches = 0;
-        String bestWord = "";
+        Map<Integer, Map<Character, Integer>> letterFrequencies = calculateLetterFrequencies();
+
+        String bestGuess = "";
+        int bestScore = -1;
 
         for (String word : guesses.possibleAnswers()) {
-            int greenMatches = 0;
-            for (int i = 0; i < word.length(); i++) {
-                char letter = word.charAt(i);
-                greenMatches += letterFrequency.get(i).get(letter);
-            }
-            if (greenMatches > bestGreenMatches) {
-                bestGreenMatches = greenMatches;
-                bestWord = word;
+            int score = scoreWord(word, letterFrequencies);
+            if (score > bestScore) {
+                bestScore = score;
+                bestGuess = word;
             }
         }
-        return bestWord;
 
+        return bestGuess;
     }
 
-    private List<Map<Character, Integer>> calculateLetterFrequency(List<String> words) {
-        Map<Character, Integer> firstIndex = new HashMap<>();
-        Map<Character, Integer> secondIndex = new HashMap<>();
-        Map<Character, Integer> thirdIndex = new HashMap<>();
-        Map<Character, Integer> fourthIndex = new HashMap<>();
-        Map<Character, Integer> fifthIndex = new HashMap<>();
+    private Map<Integer, Map<Character, Integer>> calculateLetterFrequencies() {
+        Map<Integer, Map<Character, Integer>> frequencies = new HashMap<>();
 
-        List<Map<Character, Integer>> indexList = new ArrayList<>();
-        indexList.add(firstIndex);
-        indexList.add(secondIndex);
-        indexList.add(thirdIndex);
-        indexList.add(fourthIndex);
-        indexList.add(fifthIndex);
+        int wordLength = guesses.wordLength();
+        for (int i = 0; i < wordLength; i++) {
+            frequencies.put(i, new HashMap<>());
+        }
 
-        for (String word : words) {
+        for (String word : guesses.possibleAnswers()) {
             for (int i = 0; i < word.length(); i++) {
                 char letter = word.charAt(i);
-                if (indexList.get(i).containsKey(letter)) {
-                    indexList.get(i).put(letter, indexList.get(i).get(letter) + 1);
-                } else {
-                    indexList.get(i).put(letter, 1);
-                }
+                frequencies.get(i).put(letter, frequencies.get(i).getOrDefault(letter, 0) + 1);
             }
         }
-        return indexList;
+
+        return frequencies;
+    }
+
+    private int scoreWord(String word, Map<Integer, Map<Character, Integer>> letterFrequencies) {
+        int score = 0;
+
+        for (int i = 0; i < word.length(); i++) {
+            char letter = word.charAt(i);
+            score += letterFrequencies.get(i).getOrDefault(letter, 0);
+        }
+
+        return score;
     }
 
     @Override
