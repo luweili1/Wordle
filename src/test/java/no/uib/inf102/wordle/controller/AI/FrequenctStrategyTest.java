@@ -52,7 +52,7 @@ public class FrequenctStrategyTest {
 		if (dictionary.isLegalGuess("catch")) {
 			int count = countGreen(feedback, guess);
 			int expectedCount = countGreen(feedback, "catch");
-			assertTrue(expectedCount >= count, "The word catch gave more green hits than " + guess);
+			assertTrue(expectedCount <= count, "The word catch gave more green hits than " + guess);
 		}
 	}
 
